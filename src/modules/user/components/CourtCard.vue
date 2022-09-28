@@ -7,6 +7,7 @@
           src="https://cdn.quasar.dev/img/parallax2.jpg"
           style="height: 180px"
         />
+
         <q-chip
           class="shadow-3 bottom-div"
           color="orange"
