@@ -1,7 +1,7 @@
 <template>
   <q-card class="my-card" flat bordered>
     <q-card-section horizontal>
-      <div class="col-5 q-pa-sm">
+      <div class="col-5 q-pa-md">
         <q-img
           class="rounded-borders"
           src="https://cdn.quasar.dev/img/parallax2.jpg"
@@ -82,7 +82,7 @@ export default defineComponent({
 }
 .bottom-div {
   position: absolute;
-  bottom: -4px;
+  bottom: 0px;
   left: 40px;
   z-index: 2;
 }
