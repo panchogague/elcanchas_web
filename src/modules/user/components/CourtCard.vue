@@ -12,7 +12,7 @@
           color="orange"
           text-color="white"
           icon-right="star"
-          label="5.0"
+          label="4.3"
         >
         </q-chip>
       </div>
