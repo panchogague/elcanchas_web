@@ -1,12 +1,43 @@
 <template>
   <q-page class="bg-deep-teal-1">
-    <div class="row">Filtros</div>
+    <div class="row">
+      <div class="col-2">Total canchas</div>
+      <div class="col q-pa-md">
+        <div class="q-gutter-sm row">
+          <q-input
+            color="black"
+            bg-color="white"
+            filled
+            debounce="1000"
+            label="Donde quieres jugar?"
+          >
+            <template v-slot:append>
+              <q-icon name="place" />
+            </template>
+          </q-input>
+          <q-input filled v-model="date" mask="date" :rules="['date']">
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy
+                  cover
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-date v-model="date">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-2" style="background-color: red">Filtros de busqueda</div>
-      <div
-        class="col q-pa-md row items-start q-gutter-md"
-        style="background-color: green"
-      >
+      <div class="col q-pa-md row items-start q-gutter-md">
         <court-card></court-card>
         <court-card></court-card>
         <court-card></court-card>
@@ -18,12 +49,16 @@
 </template>
 <script lang="ts">
 import CourtCard from '../components/CourtCard.vue';
+import { ref } from 'vue';
 export default {
   components: {
     CourtCard,
   },
   setup() {
-    //
+    const date = ref();
+    return {
+      date,
+    };
   },
 };
 </script>
