@@ -57,7 +57,7 @@
         size="lg"
         color="primary"
         no-caps
-        @click="router.push({ name: 'court' })"
+        @click="router.push({ name: 'booking' })"
       >
         Reserva
       </q-btn>
@@ -71,6 +71,7 @@ import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
+  name: 'CourtCard',
   setup() {
     const router = useRouter();
     return {

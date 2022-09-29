@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <q-page class="row items-center justify-evenly">
     <example-component
       title="Example component"
@@ -46,4 +46,4 @@ export default defineComponent({
     return { todos, meta };
   }
 });
-</script>
+</script> -->

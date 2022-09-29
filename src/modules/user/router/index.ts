@@ -9,9 +9,9 @@ const userRouter: RouteRecordRaw[] = [
         children: [
             { path: '/', name: 'home', component: () => import('../pages/HomePage.vue') },
             { name: 'search', path: '/search', component: () => import('../pages/SearchPage.vue') },
-            { name: 'court', path: '/court', component: () => import('../pages/CourtPage.vue') },
+            { name: 'booking', path: '/reserva', component: () => import('../pages/BookingPage.vue') },
+            { name: 'myprofile', path: '/miperfil', component: () => import('../pages/UserProfilePage.vue') },
             ...authRouter
-
         ],
     }];
 
