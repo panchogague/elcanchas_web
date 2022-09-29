@@ -5,11 +5,24 @@
         <q-avatar>
           <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
         </q-avatar>
-        <q-toolbar-title> Booking-App </q-toolbar-title>
+        <q-toolbar-title @click="router.push({ name: 'home' })">
+          Booking-App
+        </q-toolbar-title>
         <div class="gt-xs">
           <q-btn flat icon="shopping_cart" class="q-mr-sm" />
-          <q-btn outline rounded label="sign up" class="q-mr-sm" />
-          <q-btn outline rounded label="sign in" />
+          <q-btn
+            outline
+            rounded
+            label="sign up"
+            class="q-mr-sm"
+            @click="router.push({ name: 'login' })"
+          />
+          <q-btn
+            outline
+            rounded
+            label="sign in"
+            @click="router.push({ name: 'register' })"
+          />
         </div>
         <div class="lt-sm">
           <q-btn
@@ -45,6 +58,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
+import { useRouter } from 'vue-router';
 
 const linksList = [
   {
@@ -55,12 +69,12 @@ const linksList = [
   {
     title: 'Sign in',
     icon: 'record_voice_over',
-    link: 'https://github.com/quasarframework',
+    link: 'login',
   },
   {
     title: 'Sing up',
     icon: 'record_voice_over',
-    link: 'https://chat.quasar.dev',
+    link: 'register',
   },
 ];
 
@@ -73,8 +87,10 @@ export default defineComponent({
 
   setup() {
     const leftDrawerOpen = ref(false);
+    const router = useRouter();
 
     return {
+      router,
       essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer() {

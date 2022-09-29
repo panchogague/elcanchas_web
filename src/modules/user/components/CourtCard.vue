@@ -4,7 +4,7 @@
       <div class="col-5 q-pa-md">
         <q-img
           class="rounded-borders"
-          src="https://cdn.quasar.dev/img/parallax2.jpg"
+          src="https://image-service.onefootball.com/transform?w=280&h=210&dpr=2&image=https%3A%2F%2Fimages.performgroup.com%2Fdi%2Flibrary%2FGOAL%2F5b%2Fef%2Fjan-breydel-stadium_jwo0464yk8s517j36es569jht.png%3Ft%3D821261326"
           style="height: 180px"
         />
 
@@ -52,7 +52,15 @@
     <q-separator />
 
     <q-card-actions>
-      <q-btn flat size="lg" color="primary" no-caps> Reserva </q-btn>
+      <q-btn
+        flat
+        size="lg"
+        color="primary"
+        no-caps
+        @click="router.push({ name: 'court' })"
+      >
+        Reserva
+      </q-btn>
       <q-space />
       <span class="text-h6">Desde: $20.000</span>
     </q-card-actions>
@@ -60,10 +68,13 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   setup() {
+    const router = useRouter();
     return {
+      router,
       lorem:
         'Sit irure velit exercitation mollit ipsum magna irure est adipisicing laborum ad consectetur.',
     };
