@@ -5,7 +5,10 @@
         <q-avatar>
           <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
         </q-avatar>
-        <q-toolbar-title @click="router.push({ name: 'home' })">
+        <q-toolbar-title
+          @click="router.push({ name: 'home' })"
+          style="cursor: pointer"
+        >
           Booking-App
         </q-toolbar-title>
         <div class="gt-xs">

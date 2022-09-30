@@ -62,7 +62,7 @@
         Reserva
       </q-btn>
       <q-space />
-      <span class="text-h6">Desde: $20.000</span>
+      <span class="text-h6">Desde: $20.000/Hora</span>
     </q-card-actions>
   </q-card>
 </template>
