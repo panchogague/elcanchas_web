@@ -14,8 +14,24 @@
         <div class="gt-xs">
           <q-btn flat icon="shopping_cart" class="q-mr-sm" />
           <q-btn
+            v-if="isAuth"
+            rounded
+            :label="userName"
+            class="q-mr-sm"
+            no-caps
+          />
+          <q-btn
             outline
             rounded
+            v-if="isAuth"
+            label="Logout"
+            class="q-mr-sm"
+            @click="logout"
+          />
+          <q-btn
+            outline
+            rounded
+            v-if="!isAuth"
             label="sign up"
             class="q-mr-sm"
             @click="router.push({ name: 'login' })"
@@ -23,6 +39,7 @@
           <q-btn
             outline
             rounded
+            v-if="!isAuth"
             label="sign in"
             @click="router.push({ name: 'register' })"
           />
@@ -59,9 +76,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
 import EssentialLink from 'components/EssentialLink.vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from 'src/modules/auth/store/useAuthStore';
 
 const linksList = [
   {
@@ -91,11 +110,24 @@ export default defineComponent({
   setup() {
     const leftDrawerOpen = ref(false);
     const router = useRouter();
+    const useAuth = useAuthStore();
+    const { setUser, logout } = useAuth;
+
+    onMounted(() => {
+      console.log('mounting..');
+      setUser();
+    });
+
+    const { userName, isAuth } = storeToRefs(useAuth);
 
     return {
+      userName,
+      isAuth,
       router,
       essentialLinks: linksList,
       leftDrawerOpen,
+      //Methods
+      logout,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },

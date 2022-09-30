@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-deep-teal-1">
+  <q-page>
     <div class="row">
       <div class="col-2">Total canchas</div>
       <div class="col q-pa-md">

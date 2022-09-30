@@ -1,5 +1,5 @@
 <template>
-  <q-page class="bg-deep-teal-1">
+  <q-page class="bg-teal-1">
     <home-search></home-search>
   </q-page>
 </template>
