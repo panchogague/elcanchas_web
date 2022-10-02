@@ -1,3 +1,4 @@
+<script lang="ts" src="./MainLayout.ts" />
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header>
@@ -11,23 +12,9 @@
         >
           Booking-App
         </q-toolbar-title>
-        <div class="gt-xs">
+        <div>
           <q-btn flat icon="shopping_cart" class="q-mr-sm" />
-          <q-btn
-            v-if="isAuth"
-            rounded
-            :label="userName"
-            class="q-mr-sm"
-            no-caps
-          />
-          <q-btn
-            outline
-            rounded
-            v-if="isAuth"
-            label="Logout"
-            class="q-mr-sm"
-            @click="logout"
-          />
+          <user-menu class="gt-xs"></user-menu>
           <q-btn
             outline
             rounded
@@ -44,7 +31,7 @@
             @click="router.push({ name: 'register' })"
           />
         </div>
-        <div class="lt-sm">
+        <div class="lt-sm" v-if="isAuth">
           <q-btn
             flat
             dense
@@ -58,15 +45,49 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+      <q-scroll-area
+        style="
+          height: calc(100% - 150px);
+          margin-top: 150px;
+          border-right: 1px solid #ddd;
+        "
+      >
+        <q-list padding>
+          <q-item clickable v-ripple :to="{ name: 'home' }">
+            <q-item-section avatar>
+              <q-icon name="home" />
+            </q-item-section>
+            <q-item-section>Inicio</q-item-section>
+          </q-item>
+          <q-item
+            clickable
+            v-ripple
+            v-for="item in userLinks"
+            :key="item.title"
+            :to="{ name: item.link }"
+          >
+            <q-item-section avatar>
+              <q-icon :name="item.icon" />
+            </q-item-section>
+            <q-item-section> {{ item.title }} </q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
+      <q-img
+        class="absolute-top"
+        src="https://cdn.quasar.dev/img/material.png"
+        style="height: 150px"
+      >
+        <div class="absolute-bottom bg-transparent">
+          <q-avatar size="56px" class="q-mb-sm">
+            <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+          </q-avatar>
+          <div class="text-weight-bold">
+            {{ user?.firstName + ' ' + user?.lastName }}
+          </div>
+          <div>{{ user?.email }}</div>
+        </div>
+      </q-img>
     </q-drawer>
 
     <q-page-container>
@@ -74,64 +95,3 @@
     </q-page-container>
   </q-layout>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
-import { storeToRefs } from 'pinia';
-import EssentialLink from 'components/EssentialLink.vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from 'src/modules/auth/store/useAuthStore';
-
-const linksList = [
-  {
-    title: 'Carrito',
-    icon: 'shopping_cart',
-    link: 'https://quasar.dev',
-  },
-  {
-    title: 'Sign in',
-    icon: 'record_voice_over',
-    link: 'login',
-  },
-  {
-    title: 'Sing up',
-    icon: 'record_voice_over',
-    link: 'register',
-  },
-];
-
-export default defineComponent({
-  name: 'MainLayout',
-
-  components: {
-    EssentialLink,
-  },
-
-  setup() {
-    const leftDrawerOpen = ref(false);
-    const router = useRouter();
-    const useAuth = useAuthStore();
-    const { setUser, logout } = useAuth;
-
-    onMounted(() => {
-      console.log('mounting..');
-      setUser();
-    });
-
-    const { userName, isAuth } = storeToRefs(useAuth);
-
-    return {
-      userName,
-      isAuth,
-      router,
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      //Methods
-      logout,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
-    };
-  },
-});
-</script>

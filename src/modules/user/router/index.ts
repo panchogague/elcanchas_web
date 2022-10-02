@@ -6,11 +6,14 @@ const userRouter: RouteRecordRaw[] = [
     {
         path: '/',
         component: () => import('../layouts/MainLayout.vue'),
+        redirect: '/home',
         children: [
-            { path: '/', name: 'home', component: () => import('../pages/HomePage.vue') },
             { name: 'search', path: '/search', component: () => import('../pages/SearchPage.vue') },
             { name: 'booking', path: '/reserva', component: () => import('../pages/BookingPage.vue') },
             { name: 'myprofile', path: '/miperfil', component: () => import('../pages/UserProfilePage.vue') },
+            { name: 'favorite', path: '/favoritos', component: () => import('../pages/FavoriteCourtPage.vue') },
+            { name: 'mybooking', path: '/misreservas', component: () => import('../pages/MyBookingPage.vue') },
+            { path: '/home', name: 'home', component: () => import('../pages/HomePage.vue') },
             ...authRouter
         ],
     }];
