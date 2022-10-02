@@ -1,83 +1,97 @@
 import { defineStore } from 'pinia';
 import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    UserCredential
-} from 'firebase/auth'
-import { auth, onAuthStateChanged } from 'src/boot/firebase'
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  UserCredential,
+} from 'firebase/auth';
+import { auth, onAuthStateChanged } from 'src/boot/firebase';
 import { getUserData, createUser } from 'src/database/user_db';
 import { User } from 'src/models/user';
 
-
 export const useAuthStore = defineStore({
-    id: 'auth',
-    state: () => ({
-        token: '' as string,
-        user: null as User | null,
-        uid: '' as string
-    }),
-    actions: {
-        async login(email: string, password: string) {
-            try {
-                const resp = await signInWithEmailAndPassword(auth, email, password) as UserCredential;
-                this.token = resp.user.refreshToken;
-                this.user = await getUserData(resp.user.uid);
-                this.uid = resp.user.uid;
+  id: 'auth',
+  state: () => ({
+    token: '' as string,
+    user: null as User | null,
+    uid: '' as string,
+  }),
+  actions: {
+    async login(email: string, password: string) {
+      try {
+        const resp = (await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        )) as UserCredential;
+        this.token = resp.user.refreshToken;
+        this.user = await getUserData(resp.user.uid);
+        this.uid = resp.user.uid;
 
-                localStorage.setItem('token', JSON.stringify(this.token));
-                localStorage.setItem('uid', JSON.stringify(resp.user.uid));
-                this.router.push({ name: 'home' });
-            } catch (error) {
-                // const alertStore = useAlertStore();
-                // alertStore.error(error);
-                console.log(error);
-            }
-        },
+        localStorage.setItem('token', JSON.stringify(this.token));
+        localStorage.setItem('uid', JSON.stringify(resp.user.uid));
 
-        async register(user: User) {
-            try {
-                const resp = await createUserWithEmailAndPassword(auth, user.email, user.password ?? '') as UserCredential;
-                this.token = resp.user.refreshToken;
-                await createUser(resp.user.uid, user);
-                this.uid = resp.user.uid;
-
-                localStorage.setItem('token', JSON.stringify(this.token));
-                localStorage.setItem('uid', JSON.stringify(this.uid));
-                this.router.push({ name: 'home' });
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        async logout() {
-            this.user = null;
-            this.token = '';
-            this.uid = '';
-            localStorage.removeItem('token');
-            localStorage.removeItem('uid');
-            await signOut(auth);
-            this.router.push({ name: 'home' });
-        },
-
-        setUser() {
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    this.token = user.refreshToken;
-                    this.uid = user.uid;
-                    this.user = await getUserData(user.uid);
-
-                    localStorage.setItem('token', JSON.stringify(this.token));
-                    localStorage.setItem('uid', JSON.stringify(this.uid));
-
-                } else {
-                    console.log('onAuthState Observer: user not logged in or created yet')
-                }
-            })
-            persist: true //<---------persists user state to local storage! 
-        },
+        if (this.user?.isAdmin) {
+          this.router.push({ name: 'dashboard' });
+        } else {
+          this.router.push({ name: 'home' });
+        }
+      } catch (error) {
+        // const alertStore = useAlertStore();
+        // alertStore.error(error);
+        console.log(error);
+      }
     },
-    getters: {
-        isAuth: (state): boolean => state.user != null,
-        userName: (state): string => state.user != null ? state.user.firstName : '',
+
+    async register(user: User) {
+      try {
+        const resp = (await createUserWithEmailAndPassword(
+          auth,
+          user.email,
+          user.password ?? ''
+        )) as UserCredential;
+        this.token = resp.user.refreshToken;
+        await createUser(resp.user.uid, user);
+        this.uid = resp.user.uid;
+
+        localStorage.setItem('token', JSON.stringify(this.token));
+        localStorage.setItem('uid', JSON.stringify(this.uid));
+        this.router.push({ name: 'home' });
+      } catch (error) {
+        console.log(error);
+      }
     },
+    async logout() {
+      this.user = null;
+      this.token = '';
+      this.uid = '';
+      localStorage.removeItem('token');
+      localStorage.removeItem('uid');
+      await signOut(auth);
+      this.router.push({ name: 'home' });
+    },
+
+    setUser() {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          this.token = user.refreshToken;
+          this.uid = user.uid;
+          this.user = await getUserData(user.uid);
+
+          localStorage.setItem('token', JSON.stringify(this.token));
+          localStorage.setItem('uid', JSON.stringify(this.uid));
+        } else {
+          console.log(
+            'onAuthState Observer: user not logged in or created yet'
+          );
+        }
+      });
+      persist: true; //<---------persists user state to local storage!
+    },
+  },
+  getters: {
+    isAuth: (state): boolean => state.user != null,
+    userName: (state): string =>
+      state.user != null ? state.user.firstName : '',
+  },
 });
