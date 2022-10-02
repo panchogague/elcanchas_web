@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia';
-import { auth, onAuthStateChanged } from 'src/boot/firebase'
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
     UserCredential
 } from 'firebase/auth'
-import { useUserDB } from 'src/database/useUserDB';
-import { User } from 'src/models/User';
+import { auth, onAuthStateChanged } from 'src/boot/firebase'
+import { getUserData, createUser } from 'src/database/user_db';
+import { User } from 'src/models/user';
 
 
 export const useAuthStore = defineStore({
@@ -22,7 +22,7 @@ export const useAuthStore = defineStore({
             try {
                 const resp = await signInWithEmailAndPassword(auth, email, password) as UserCredential;
                 this.token = resp.user.refreshToken;
-                this.user = await useUserDB().getUserData(resp.user.uid);
+                this.user = await getUserData(resp.user.uid);
                 this.uid = resp.user.uid;
 
                 localStorage.setItem('token', JSON.stringify(this.token));
@@ -39,7 +39,7 @@ export const useAuthStore = defineStore({
             try {
                 const resp = await createUserWithEmailAndPassword(auth, user.email, user.password ?? '') as UserCredential;
                 this.token = resp.user.refreshToken;
-                await useUserDB().createUser(resp.user.uid, user);
+                await createUser(resp.user.uid, user);
                 this.uid = resp.user.uid;
 
                 localStorage.setItem('token', JSON.stringify(this.token));
@@ -64,7 +64,7 @@ export const useAuthStore = defineStore({
                 if (user) {
                     this.token = user.refreshToken;
                     this.uid = user.uid;
-                    this.user = await useUserDB().getUserData(user.uid);
+                    this.user = await getUserData(user.uid);
 
                     localStorage.setItem('token', JSON.stringify(this.token));
                     localStorage.setItem('uid', JSON.stringify(this.uid));

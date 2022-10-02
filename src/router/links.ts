@@ -1,4 +1,4 @@
-import { LinkItem } from '../models/LinkItem'
+import { LinkItem } from '../models/link_item'
 
 
 export const userLinks = [

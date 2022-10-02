@@ -1,4 +1,4 @@
-import { User } from 'src/models/User';
+import { User } from 'src/models/user';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../store/useAuthStore';
