@@ -1,3 +1,4 @@
+import { DocumentSnapshot,SnapshotOptions } from 'firebase/firestore';
 import { OpenDay } from './open_day';
 import { Pitch } from './pitch';
 
@@ -44,3 +45,21 @@ export class Court {
     return `${this.priceFrom}`; //TODO:formatear
   }
 }
+// Firestore data converter
+export const courtConverter = {
+  toFirestore: (court: Court) => {
+      return {
+          name: court.name,
+          imgUrl: court.imgUrl,
+          location: court.location,
+          description: court.description,
+          //TODO:continuar
+      };
+  },
+  fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
+      const data = snapshot.data(options);
+      if (data) {
+          //return new Court(data.name);
+      }
+  }
+};

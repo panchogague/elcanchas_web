@@ -65,6 +65,7 @@
 <script lang="ts">
 import CourtCard from '../components/CourtCard.vue';
 import { ref } from 'vue';
+import { getCourts } from 'src/database/court_db';
 
 export default {
   components: {
@@ -72,6 +73,8 @@ export default {
   },
   setup() {
     const date = ref();
+
+    getCourts();
 
     return {
       date,
