@@ -1,14 +1,19 @@
 import { db } from 'src/boot/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import { Court, courtConverter } from 'src/models/court';
+import { getPitchesByCourtId } from './pitch_db';
 
-export const getCourts = async () => {
-  const q = query(collection(db, 'courts'), where('isActive', '==', true));
+export const getCourts = async (): Promise<Court[]> => {
+  const q = query(collection(db, 'courts').withConverter(courtConverter), where('isActive', '==', true));
   const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    
-    // doc.data() is never undefined for query doc snapshots
-    console.log(doc.id, ' => ', doc.data());
+  const courts: Court[] = [];
+  querySnapshot.forEach((item) => {
+    const court = item.data() as Court;
+    getPitchesByCourtId(item.id).then((resp) => {
+      court.pitches = resp;
+    });
+    court.id = item.id;
+    courts.push(court);
   });
-
-  return null;
+  return courts;
 };

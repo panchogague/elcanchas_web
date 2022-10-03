@@ -4,25 +4,26 @@
       <div class="col-5 q-pa-md">
         <q-img
           class="rounded-borders"
-          src="https://image-service.onefootball.com/transform?w=280&h=210&dpr=2&image=https%3A%2F%2Fimages.performgroup.com%2Fdi%2Flibrary%2FGOAL%2F5b%2Fef%2Fjan-breydel-stadium_jwo0464yk8s517j36es569jht.png%3Ft%3D821261326"
+          :src="court.imgUrl"
           style="height: 180px"
         />
 
         <q-chip
+          v-if="court.rating"
           class="shadow-3 bottom-div"
           color="orange"
           text-color="white"
           icon-right="star"
-          label="4.3"
+          :label="court.rating"
         >
         </q-chip>
       </div>
       <q-card-section class="q-gutter-md">
         <div class="row items-center">
           <q-icon name="location_on" style="color: gray" />
-          <span class="subtitle"> Calle Aranda #34, Villa Alemana</span>
+          <span class="subtitle">{{ court.location }}</span>
         </div>
-        <span class="row text-h6">Cancha Guaton Linares</span>
+        <span class="row text-h6">{{ court.name }}</span>
         <div class="row">
           <div class="col q-mr-xs">
             <q-chip
@@ -57,27 +58,37 @@
         size="lg"
         color="primary"
         no-caps
-        @click="router.push({ name: 'booking' })"
+        @click="
+          router.push({
+            name: 'court',
+            params: { id: court.id, court: JSON.stringify(court) },
+          })
+        "
       >
         Reserva
       </q-btn>
       <q-space />
-      <span class="text-h6">Desde: $20.000/Hora</span>
+      <span class="text-h6">Desde: {{ court.priceFrom }}/Hora</span>
     </q-card-actions>
   </q-card>
 </template>
 <script lang="ts">
+import { Court } from 'src/models/court';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'CourtCard',
+  props: {
+    court: {
+      type: Court,
+      required: true,
+    },
+  },
   setup() {
     const router = useRouter();
     return {
       router,
-      lorem:
-        'Sit irure velit exercitation mollit ipsum magna irure est adipisicing laborum ad consectetur.',
     };
   },
 });

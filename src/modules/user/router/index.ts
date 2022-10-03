@@ -8,8 +8,8 @@ const userRouter: RouteRecordRaw[] = [
         component: () => import('../layouts/MainLayout.vue'),
         redirect: '/home',
         children: [
-            { name: 'search', path: '/search', component: () => import('../pages/SearchPage.vue') },
-            { name: 'booking', path: '/reserva', component: () => import('../pages/BookingPage.vue') },
+            { name: 'search', path: '/search', component: () => import('../pages/SearchPage/SearchPage.vue') },
+            { name: 'court', path: '/recinto/:id', props: true, component: () => import('../pages/BookingPage.vue') },
             { name: 'myprofile', path: '/miperfil', component: () => import('../pages/UserProfilePage.vue') },
             { name: 'favorite', path: '/favoritos', component: () => import('../pages/FavoriteCourtPage.vue') },
             { name: 'mybooking', path: '/misreservas', component: () => import('../pages/MyBookingPage.vue') },

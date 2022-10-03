@@ -1,6 +1,7 @@
 <template>
   <q-page class="bg-deep-teal-1">
     <div class="q-ml-lg q-mt-sm">
+      {{ court }}
       <q-breadcrumbs class="text-brown">
         <template v-slot:separator>
           <q-icon size="1.5em" name="chevron_right" color="primary" />
@@ -144,21 +145,41 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { Court } from 'src/models/court';
+import { useCourtStore } from 'src/stores/useCourtStore';
+import { defineComponent, ref, onMounted } from 'vue';
 import BookingDetailCard from '../components/BookingDetailCard.vue';
 import BookingDetailInfo from '../components/BookingDetailInfo.vue';
 import BookingHeader from '../components/BookingHeader.vue';
 import SlotCard from '../components/SlotCard.vue';
 
 export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   components: {
     BookingDetailInfo,
     BookingHeader,
     SlotCard,
     BookingDetailCard,
   },
-  setup() {
+  setup(prop) {
+    const store = useCourtStore();
+    const court = ref<Court>();
+
+    onMounted(async () => {
+      if (store.courts.length > 0) {
+        court.value = store.getCourtById(prop.id);
+      } else {
+        //get data from court db
+      }
+    });
+
     return {
+      court,
       date: ref('2022/09/29'),
       slide: ref(1),
     };

@@ -1,4 +1,4 @@
-import { DocumentSnapshot,SnapshotOptions } from 'firebase/firestore';
+import { DocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
 import { OpenDay } from './open_day';
 import { Pitch } from './pitch';
 
@@ -7,8 +7,8 @@ export class Court {
   name: string;
   imgUrl: string;
   location: string;
-  rating?: number;
-  priceFrom?: number;
+  rating?: number | null;
+  priceFrom?: number | null;
   description: string;
   howToAccess: string;
   cancellationPolicy: string;
@@ -48,18 +48,28 @@ export class Court {
 // Firestore data converter
 export const courtConverter = {
   toFirestore: (court: Court) => {
-      return {
-          name: court.name,
-          imgUrl: court.imgUrl,
-          location: court.location,
-          description: court.description,
-          //TODO:continuar
-      };
+    return {
+      name: court.name,
+      imgUrl: court.imgUrl,
+      location: court.location,
+      description: court.description,
+      howToAccess: court.howToAccess,
+      cancellationPolicy: court.cancellationPolicy,
+      userId: court.userId,
+      categories: court.categories,
+      isActive: court.isActive,
+      pitches: court.pitches
+    };
   },
   fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
-      const data = snapshot.data(options);
-      if (data) {
-          //return new Court(data.name);
-      }
+    const data = snapshot.data(options) as Court;
+    if (data) {
+      const model = new Court(data.name, data.imgUrl, data.location, data.description, data.howToAccess, data.cancellationPolicy, data.userId,
+        data.categories, []);
+      model.openDays = data.openDays ?? [];
+      model.priceFrom = data.priceFrom ?? null;
+      model.rating = data.rating ?? null;
+      return model;
+    }
   }
 };
