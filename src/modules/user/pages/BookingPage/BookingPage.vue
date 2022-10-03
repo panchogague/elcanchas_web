@@ -1,7 +1,7 @@
+<script lang="ts" src="./BookingPage.ts" />
 <template>
   <q-page class="bg-deep-teal-1">
     <div class="q-ml-lg q-mt-sm">
-      {{ court }}
       <q-breadcrumbs class="text-brown">
         <template v-slot:separator>
           <q-icon size="1.5em" name="chevron_right" color="primary" />
@@ -12,13 +12,16 @@
           icon="search"
           :to="{ name: 'search' }"
         />
-        <q-breadcrumbs-el label="Cancha Guaton Linares" icon="sports_soccer" />
+        <q-breadcrumbs-el :label="court?.name" icon="sports_soccer" />
       </q-breadcrumbs>
     </div>
     <booking-header
-      title="Cancha guaton linares"
-      img="https://image-service.onefootball.com/transform?w=280&h=210&dpr=2&image=https%3A%2F%2Fimages.performgroup.com%2Fdi%2Flibrary%2FGOAL%2F5b%2Fef%2Fjan-breydel-stadium_jwo0464yk8s517j36es569jht.png%3Ft%3D821261326"
-      location="Calle Aranda #34, Villa Alemana"
+      :title="court?.name"
+      :img="court?.imgUrl"
+      :location="court?.location"
+      :price="court?.priceFrom"
+      :openHours="openHours"
+      :rating="court?.rating"
     ></booking-header>
     <q-separator class="shadow-1" />
     <div class="row">
@@ -143,46 +146,3 @@
     </div>
   </q-page>
 </template>
-
-<script lang="ts">
-import { Court } from 'src/models/court';
-import { useCourtStore } from 'src/stores/useCourtStore';
-import { defineComponent, ref, onMounted } from 'vue';
-import BookingDetailCard from '../components/BookingDetailCard.vue';
-import BookingDetailInfo from '../components/BookingDetailInfo.vue';
-import BookingHeader from '../components/BookingHeader.vue';
-import SlotCard from '../components/SlotCard.vue';
-
-export default defineComponent({
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-  },
-  components: {
-    BookingDetailInfo,
-    BookingHeader,
-    SlotCard,
-    BookingDetailCard,
-  },
-  setup(prop) {
-    const store = useCourtStore();
-    const court = ref<Court>();
-
-    onMounted(async () => {
-      if (store.courts.length > 0) {
-        court.value = store.getCourtById(prop.id);
-      } else {
-        //get data from court db
-      }
-    });
-
-    return {
-      court,
-      date: ref('2022/09/29'),
-      slide: ref(1),
-    };
-  },
-});
-</script>

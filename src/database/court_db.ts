@@ -1,5 +1,5 @@
 import { db } from 'src/boot/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { Court, courtConverter } from 'src/models/court';
 import { getPitchesByCourtId } from './pitch_db';
 
@@ -17,3 +17,20 @@ export const getCourts = async (): Promise<Court[]> => {
   });
   return courts;
 };
+
+
+export const getCourtById = async (courtId: string) => {
+  const docRef = doc(db, 'courts', courtId).withConverter(courtConverter);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const court = docSnap.data();
+    if (court) {
+      court.id = courtId;
+      getPitchesByCourtId(courtId).then((resp) => {
+        court.pitches = resp;
+      });
+      return court as Court;
+    }
+  }
+  return null;
+}

@@ -29,13 +29,18 @@
         </div>
       </div>
       <div class="col">
-        <q-icon name="star" color="orange" size="20px" class="q-mb-xs" />
+        <q-icon
+          name="star"
+          color="orange"
+          size="20px"
+          class="q-mb-xs"
+          v-if="rating"
+        />
         <span class="text-body1">
-          4.5 <a href="#">(Ver Comentarios)</a> · Abre a las: 12:00PM · Cierra a
-          las: 22:00PM</span
+          {{ rating }} <a href="#">(Ver Comentarios)</a> · {{ openHours }}</span
         >
       </div>
-      <span class="row text-h6"> Desde: $25.000/Hora</span>
+      <span class="row text-h6"> Desde: ${{ price }}/Hora</span>
     </div>
   </div>
   <div class="lt-md">
@@ -53,13 +58,12 @@
       </div>
 
       <div class="col">
-        <q-icon name="star" color="orange" size="18px" />
+        <q-icon name="star" color="orange" size="18px" v-if="rating" />
         <span class="text-body2 q-ml-xs">
-          4.5 <a href="#">(Ver Comentarios)</a> · Abre a las: 12:00PM · Cierra a
-          las: 22:00PM</span
+          {{ rating }} <a href="#">(Ver Comentarios)</a> · {{ openHours }}</span
         >
       </div>
-      <span class="row text-h6"> Desde: $25.000/Hora</span>
+      <span class="row text-h6"> Desde: ${{ price }}/Hora</span>
       <div class="row">
         <div class="col">
           <q-btn color="primary" no-caps>
@@ -85,15 +89,21 @@ export default defineComponent({
   props: {
     img: {
       type: String,
-      required: true,
     },
     location: {
       type: String,
-      required: true,
     },
     title: {
       type: String,
-      required: true,
+    },
+    price: {
+      type: String,
+    },
+    openHours: {
+      type: String,
+    },
+    rating: {
+      type: Number,
     },
   },
   setup() {

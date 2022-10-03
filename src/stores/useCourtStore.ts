@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { getCourts } from 'src/database/court_db';
+import { getCourts, getCourtById } from 'src/database/court_db';
 import { Court } from 'src/models/court';
 
 export const useCourtStore = defineStore('court', {
@@ -14,6 +14,16 @@ export const useCourtStore = defineStore('court', {
       try {
         const resp = await getCourts();
         this.courts = resp;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async loadCourtById(courtId: string) {
+      try {
+        const court = await getCourtById(courtId);
+        if (court != null) {
+          this.courts.push(court);
+        }
       } catch (error) {
         console.log(error);
       }
