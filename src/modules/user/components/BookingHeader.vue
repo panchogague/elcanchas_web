@@ -97,7 +97,7 @@ export default defineComponent({
       type: String,
     },
     price: {
-      type: String,
+      type: Number,
     },
     openHours: {
       type: String,

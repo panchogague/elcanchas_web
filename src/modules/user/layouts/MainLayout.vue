@@ -21,14 +21,14 @@
             v-if="!isAuth"
             label="sign up"
             class="q-mr-sm"
-            @click="router.push({ name: 'login' })"
+            @click="router.push({ name: 'register' })"
           />
           <q-btn
             outline
             rounded
             v-if="!isAuth"
             label="sign in"
-            @click="router.push({ name: 'register' })"
+            @click="router.push({ name: 'login' })"
           />
         </div>
         <div class="lt-sm" v-if="isAuth">

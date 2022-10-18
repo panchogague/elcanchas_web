@@ -4,7 +4,8 @@ import { defineComponent, ref, onMounted, computed } from 'vue';
 import BookingDetailCard from '../../components/BookingDetailCard.vue';
 import BookingDetailInfo from '../../components/BookingDetailInfo.vue';
 import BookingHeader from '../../components/BookingHeader.vue';
-import SlotCard from '../../components/SlotCard.vue';
+import SlotPicker from '../../components/SlotPicker/SlotPicker.vue';
+import { useBooking } from '../../store/useBooking';
 
 export default defineComponent({
     props: {
@@ -16,11 +17,12 @@ export default defineComponent({
     components: {
         BookingDetailInfo,
         BookingHeader,
-        SlotCard,
+        SlotPicker,
         BookingDetailCard,
     },
     setup(prop) {
         const store = useCourtStore();
+        const bookingStore = useBooking();
         const court = ref<Court>();
 
         onMounted(async () => {
@@ -30,6 +32,7 @@ export default defineComponent({
                 await store.loadCourtById(prop.id);
                 court.value = store.getCourtById(prop.id);
             }
+            bookingStore.court = court.value ?? null;
         });
 
         return {

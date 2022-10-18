@@ -5,11 +5,11 @@
       <q-separator />
       <div class="row justify-between">
         <div class="text-subtitle1">Cancha:</div>
-        <div class="text-subtitle1">Cancha 1 (6v6)</div>
+        <div class="text-subtitle1">{{ pitchName }}</div>
       </div>
       <div class="row justify-between">
         <div class="text-subtitle1">Fecha:</div>
-        <div class="text-subtitle1">29-09-2022</div>
+        <div class="text-subtitle1">{{ getCurrentDate }}</div>
       </div>
       <div class="row justify-between">
         <div class="text-subtitle1">Horario:</div>
@@ -46,10 +46,16 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useBooking } from '../store/useBooking';
+import { storeToRefs } from 'pinia';
 export default defineComponent({
   name: 'BookingDetailCard',
   setup() {
-    //
+    const { pitchName, getCurrentDate } = storeToRefs(useBooking());
+    return {
+      pitchName,
+      getCurrentDate,
+    };
   },
 });
 </script>

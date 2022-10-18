@@ -26,9 +26,7 @@ export const getCourtById = async (courtId: string) => {
     const court = docSnap.data();
     if (court) {
       court.id = courtId;
-      getPitchesByCourtId(courtId).then((resp) => {
-        court.pitches = resp;
-      });
+      court.pitches = await getPitchesByCourtId(courtId);
       return court as Court;
     }
   }
